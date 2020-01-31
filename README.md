@@ -9,8 +9,6 @@ Microsoft OneDrive has a super great feature (for Windows) called [Known Folder 
 
 - This application does not currently work with the Apple Store version of OneDrive. Please use the stand alone version instead. It can be downloaded from here: [https://macadmins.software/](https://macadmins.software/).
 
-- [OutSet](https://github.com/chilcote/outset) is required for this application.
-
 - As this applicaiton interacts with User data, please do your own testing for your enviorment.  Feel free to submit detailed issues if you find bugs.
 
 ## Getting started
@@ -21,27 +19,11 @@ You can choose to either download a release pkg or build your own. These steps a
 
 2. Set preferences. You can either set them with a `sudo defaults write` command, a .mobileconfig profile, or an MDM profile. A sample.mobileconfig file is included in this repo.
 
- `sudo defaults write "/Library/Preferences/com.cambridgeconsultants.onedrive-kfm" EnableKFM -bool YES` 
-
- `sudo defaults write "/Library/Preferences/com.cambridgeconsultants.onedrive-kfm" FixBadFileNames -bool YES` 
-
- `sudo defaults write "/Library/Preferences/com.cambridgeconsultants.onedrive-kfm" TenantID "12345678-1234-1234-1234-1234567891011"` 
-
- `sudo defaults write "/Library/Preferences/com.cambridgeconsultants.onedrive-kfm" OneDriveFolderName "OneDrive - Companyname"` 
-
-Here is what each setting does:
-
--  **EnableKFM**  *(required)* : If set to True then KFM attempts to run. If False or does not exist - the script will just exit. This gives control on a per machine basis of if KFM shall be turned on.
-
--  **TenantID**  *(required)* : This is your AzureAD Tenant ID. If you do not know what this is, you can look it up with instructions [here](https://docs.microsoft.com/en-us/onedrive/find-your-office-365-tenant-id).
-
--  **OneDriveFolderName**  *(required)* : This is the default name of your OneDrive sync folder. This will be something like *"OneDrive - Company Name"*. This is the directory that OneDrive creates in your home directory for syncing.
-
--  **FixBadFileNames**  *(optional)* : If this is set to True, then an attempt is made after setting up KFM to fix file names that are not valid with OneDrive. A report is saved on the desktop letting the user know what was changed. If this is set to False or not set, then no attempt will be made to rename files.
-
 3. Install [OutSet](https://github.com/chilcote/outset). OutSet is used to run logon/startup scripts on MacOS. This is a dependency of this application.
 
-4. Install the latest version of *MacOS-OneDrive-KFM-X. X.pkg*
+4. Install [mysides](https://github.com/mosen/mysides). mysides is a wrapper for sfltool to recreate Finder side-bar shortcuts after folders are relocated. This is a dependency of this application.
+
+5. Install the latest version of *MacOS-OneDrive-KFM-X. X.pkg*
 
 ## Building the package
 
@@ -58,6 +40,28 @@ Here is what each setting does:
 4. MunkiPkg will now create a new build:
 
  `munkipkg .` 
+
+5. Find the completed build in the `build` directory
+
+## Settings Reference
+
+Here is what each setting does:
+
+-  **EnableKFM**  *(required)* : If set to True then KFM attempts to run. If False or does not exist - the script will just exit. This gives control on a per machine basis of if KFM shall be turned on.
+
+-  **TenantID**  *(required)* : This is your AzureAD Tenant ID. If you do not know what this is, you can look it up with instructions [here](https://docs.microsoft.com/en-us/onedrive/find-your-office-365-tenant-id).
+
+-  **OneDriveFolderName**  *(required)* : This is the default name of your OneDrive sync folder. This will be something like *"OneDrive - Company Name"*. This is the directory that OneDrive creates in your home directory for syncing.
+
+-  **FixBadFileNames**  *(optional)* : If this is set to True, then an attempt is made after setting up KFM to fix file names that are not valid with OneDrive. A report is saved on the desktop letting the user know what was changed. If this is set to False or not set, then no attempt will be made to rename files.
+
+### Example
+```
+sudo defaults write "/Library/Preferences/com.cambridgeconsultants.onedrive-kfm" EnableKFM -bool YES
+sudo defaults write "/Library/Preferences/com.cambridgeconsultants.onedrive-kfm" FixBadFileNames -bool YES
+sudo defaults write "/Library/Preferences/com.cambridgeconsultants.onedrive-kfm" TenantID "12345678-1234-1234-1234-1234567891011"
+sudo defaults write "/Library/Preferences/com.cambridgeconsultants.onedrive-kfm" OneDriveFolderName "OneDrive - Companyname"
+```
 
 ## Tips, Tricks, and Troubleshooting
 

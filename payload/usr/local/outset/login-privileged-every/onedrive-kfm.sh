@@ -6,8 +6,9 @@
 #               : Thus allowing you to use your MDM to set this setting.  One way to run this script is using Outset https://github.com/chilcote/outset in one of the privileged execution directories
 #               : This script is designed to work with the OneDrive version as deployed from https://macadmins.software/ vs the AppStore version
 #               : Modifications could easily be made to support the AppStore version of OneDrive if desired
-#Author       	: Brian McFarlane
-#Email         	: samspade@synapse.com
+#               : 2020-01-31 Added 'mysides' functionality to remove and recreate sidebar links to Desktop and Documents
+#Authors       	: Brian McFarlane, Nathan Manzi
+#Email         	: samspade@synapse.com, nathan@nmanzi.com
 ###################################################################
 
 #Read in Script preferences.  These can be set with a 'sudo defaults write' command or using a mobileconfig with your MDM
@@ -15,6 +16,25 @@ defaultTenantID=$(/usr/bin/python -c "from Foundation import CFPreferencesCopyAp
 defaultOneDriveName=$(/usr/bin/python -c "from Foundation import CFPreferencesCopyAppValue; print CFPreferencesCopyAppValue('OneDriveFolderName', 'com.cambridgeconsultants.onedrive-kfm')")
 oneDriveKFMEnabled=$(/usr/bin/python -c "from Foundation import CFPreferencesCopyAppValue; print CFPreferencesCopyAppValue('EnableKFM', 'com.cambridgeconsultants.onedrive-kfm')")
 fixBadFileNames=$(/usr/bin/python -c "from Foundation import CFPreferencesCopyAppValue; print CFPreferencesCopyAppValue('FixBadFileNames', 'com.cambridgeconsultants.onedrive-kfm')")
+
+#URL Encoding Helper for mysides
+rawurlencode() {
+  local string="${1}"
+  local strlen=${#string}
+  local encoded=""
+  local pos c o
+
+  for (( pos=0 ; pos<strlen ; pos++ )); do
+     c=${string:$pos:1}
+     case "$c" in
+        [-_.~a-zA-Z0-9] ) o="${c}" ;;
+        * )               printf -v o '%%%02x' "'$c"
+     esac
+     encoded+="${o}"
+  done
+  echo "${encoded}"    # You can either set a return variable (FASTER) 
+  REPLY="${encoded}"   #+or echo the result (EASIER)... or both... :p
+}
 
 #Only enable OneDrive KFM for machines with a preference file turning it on
 if [ "$oneDriveKFMEnabled" != "True" ] && [ "$defaultTenantID" == "None" ] && [ "$defaultOneDriveName" == "None" ]; then
@@ -111,6 +131,11 @@ for user in $userList; do
                 killall -KILL Finder
                 #Launch OneDrive and put it in the background (hide errors if not installed)
                 open -a OneDrive.app -g >/dev/null 2>&1
+                #Use mysides to reconstruct the shortcuts in finder sidebar
+                sudo -u $user /usr/local/bin/mysides remove Desktop
+                sudo -u $user /usr/local/bin/mysides remove Documents
+                sudo -u $user /usr/local/bin/mysides add Desktop file://$userHomeDirectory/$( rawurlencode "$defaultOneDriveName" )/Desktop/
+                sudo -u $user /usr/local/bin/mysides add Documents file://$userHomeDirectory/$( rawurlencode "$defaultOneDriveName" )/Documents/
             fi
 
         fi
