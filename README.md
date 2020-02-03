@@ -9,7 +9,9 @@ Microsoft OneDrive has a super great feature (for Windows) called [Known Folder 
 
 - This application does not currently work with the Apple Store version of OneDrive. Please use the stand alone version instead. It can be downloaded from here: [https://macadmins.software/](https://macadmins.software/).
 
-- As this applicaiton interacts with User data, please do your own testing for your enviorment.  Feel free to submit detailed issues if you find bugs.
+- As this application interacts with User data, please do your own testing for your enviorment.  Feel free to submit detailed issues if you find bugs.
+
+- Finder sidebar shortcuts to Desktop and Documents are recreated, but placed at the bottom of the sidebar.
 
 ## Getting started
 
