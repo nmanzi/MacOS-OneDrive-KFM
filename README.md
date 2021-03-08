@@ -11,7 +11,7 @@ Microsoft OneDrive has a super great feature (for Windows) called [Known Folder 
 
 - As this application interacts with User data, please do your own testing for your enviorment.  Feel free to submit detailed issues if you find bugs.
 
-- Finder sidebar shortcuts to Desktop and Documents are recreated, but placed at the bottom of the sidebar.
+- Finder sidebar shortcuts to Desktop and Documents are recreated, but placed at the bottom of the sidebar. See [my blog post on this.](https://blog.hadric.us/blog/onedrive-kfm-macos)
 
 ## Getting started
 
